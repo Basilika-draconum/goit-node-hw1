@@ -1,19 +1,13 @@
 const fs = require("fs/promises");
 const path = require("path");
-const { nanoid } = require("nanoid");
+var uniqid = require("uniqid");
 
-// const __dirname = path.dirname(fileURLToPath(import.meta.url));
-// const contactsPath = path.join("/", "db", "contacts.json");
-// const contactsPath = path.resolve("db/contacts.json");
 const contactsPath = path.join(__dirname, "/db/contacts.json");
 
 async function listContacts() {
   const data = await fs.readFile(contactsPath);
   const contacts = JSON.parse(data);
   return contacts;
-  //   await fs.readFile(contactsPath, (_, data) => {
-  //     console.log(data.toString());
-  //   });
 }
 
 async function getContactById(contactId) {
@@ -36,7 +30,7 @@ async function removeContact(contactId) {
 
 async function addContact(name, email, phone) {
   const list = await listContacts();
-  const newContact = { id: nanoid(), name, email, phone };
+  const newContact = { id: uniqid(), name, email, phone };
   const contactsList = JSON.stringify([newContact, ...list], null, "\t");
   await fs.writeFile(contactsPath, contactsList);
   return newContact;
